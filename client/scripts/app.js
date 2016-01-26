@@ -12,6 +12,8 @@ $(document).ready(function()  {
     house: {},
 
     init: function(){
+
+      app.username = window.location.search.substr(10);
       var self = this;
       //$('.submit').on('submit', app.handleSubmit);
       $('#send').on('submit', function(event){
@@ -26,6 +28,8 @@ $(document).ready(function()  {
     },
 
     send: function(message){
+
+      console.log(message)
       $.ajax({
 
         url: 'https://api.parse.com/1/classes/chatterbox',
@@ -33,12 +37,14 @@ $(document).ready(function()  {
         data: JSON.stringify(message),
         contentType: 'application/json',
         success: function (message) {
+         console.log('this is our message ' + message);
          console.log('chatterbox: Message sent. Data: ', message);
-
+         console.log(message.text)
+         app.fetch();
        },
-        error: function (data) {
+        error: function (message) {
 
-          console.error('chatterbox: Failed to send message. Error: ', data);
+          console.error('chatterbox: Failed to send message. Error: ', message);
         }
      });
     },
@@ -52,7 +58,7 @@ $(document).ready(function()  {
         data:{order: '-createdAt'},
         contentType: 'application/json',
         success: function (data) {
-          console.log('chatterbox: Message received. Data: ', data);
+         // console.log('chatterbox: Message received. Data: ', data);
           app.addMessage(data.results);
 
           app.addRoom(data.results);
@@ -71,9 +77,10 @@ $(document).ready(function()  {
     },
 
     addMessage: function(results){
+      app.clearMessages();
       _.each(results, function(item){
         var txt = $("<div class='chats'></div>").text(item.username + ': ' + item.text);
-        $('.chat').prepend(txt);
+        $('.chat').append(txt);
       });
     },
 
@@ -98,8 +105,8 @@ $(document).ready(function()  {
 
 
       var message = {
-        username: this.username,
-        text: $('.message').val(),
+        username: app.username,
+        text: $('#message').val(),
         roomname: this.room || 'main'
       };
       this.send(message);
