@@ -14,12 +14,28 @@ $(document).ready(function()  {
     init: function(){
 
       app.username = window.location.search.substr(10);
+      //$('#roomSelection').val() = 'main';
       var self = this;
       //$('.submit').on('submit', app.handleSubmit);
+
+
       $('#send').on('submit', function(event){
         event.preventDefault();
         console.log('submit');
         self.handleSubmit();
+      })
+
+
+      $('#roomSelection').change(function(){
+        //event.preventDefault();
+        console.log('clicking');
+        var roomSelection = $('#roomSelection').val();
+        var newRoom = $('#newRoom');
+        console.log(roomSelection);
+
+        if (roomSelection === 'New Room'){
+          app.addNewRoom();
+        }
       })
 
       app.fetch();
@@ -86,6 +102,8 @@ $(document).ready(function()  {
 
     addRoom: function(results){
 
+      var creatingRoom = $('.createNewRoom').val();
+      app.house[creatingRoom] = true;
 
       _.each(results, function(item){
         var room = item.roomname;
@@ -98,6 +116,20 @@ $(document).ready(function()  {
         }
       });
 
+    },
+
+    addNewRoom: function(){
+      //var roomSelection = $('#roomSelection').val();
+
+      //if(roomSelection === 'New Room'){
+        console.log('should get a prompt here');
+        var createNewRoom = prompt('Name your room');
+        if(createNewRoom){
+          app.house[createNewRoom] = true;
+          $('#roomSelection').append('<option value="' + createNewRoom + '">'+ createNewRoom +'</option>');
+        }
+
+        $('#roomSelection').val(createNewRoom);
     },
 
 
