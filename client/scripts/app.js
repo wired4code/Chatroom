@@ -22,7 +22,7 @@ $(document).ready(function()  {
 
       app.fetch();
 
-      //setInterval(app.fetch, 10000);
+      setInterval(app.fetch, 10000);
     },
 
     send: function(message){
@@ -49,6 +49,7 @@ $(document).ready(function()  {
         url: 'https://api.parse.com/1/classes/chatterbox',
         type: 'GET',
         //data: JSON.stringify(message),
+        data:{order: '-createdAt'},
         contentType: 'application/json',
         success: function (data) {
           console.log('chatterbox: Message received. Data: ', data);
@@ -72,7 +73,7 @@ $(document).ready(function()  {
     addMessage: function(results){
       _.each(results, function(item){
         var txt = $("<div class='chats'></div>").text(item.username + ': ' + item.text);
-        $('.chat').append(txt);
+        $('.chat').prepend(txt);
       });
     },
 
