@@ -9,16 +9,20 @@ $(document).ready(function()  {
     server: "https://api.parse.com/1/classes/chatterbox",
     username: 'anonymous',
     room: 'main',
+    house: {},
 
     init: function(){
-
+      var self = this;
       //$('.submit').on('submit', app.handleSubmit);
-      $('form').submit(function(event){
+      $('#send').on('submit', function(event){
         event.preventDefault();
-        app.handleSubmit();
+        console.log('submit');
+        self.handleSubmit();
       })
 
       app.fetch();
+
+      //setInterval(app.fetch, 10000);
     },
 
     send: function(message){
@@ -28,27 +32,29 @@ $(document).ready(function()  {
         type: 'POST',
         data: JSON.stringify(message),
         contentType: 'application/json',
-        success: function (data) {
-         console.log('chatterbox: Message sent. Data: ', data);
-         app.fetch();
+        success: function (message) {
+         console.log('chatterbox: Message sent. Data: ', message);
+
        },
         error: function (data) {
 
-        console.error('chatterbox: Failed to send message. Error: ', data);
-      }
+          console.error('chatterbox: Failed to send message. Error: ', data);
+        }
      });
     },
 
     fetch: function(message){
       $.ajax({
-
+        //https://api.parse.com/1/classes/chatterbox?where={"username":{"$in":["anonymous"]}}'
         url: 'https://api.parse.com/1/classes/chatterbox',
         type: 'GET',
-        data: JSON.stringify(message),
+        //data: JSON.stringify(message),
         contentType: 'application/json',
         success: function (data) {
           console.log('chatterbox: Message received. Data: ', data);
           app.addMessage(data.results);
+
+          app.addRoom(data.results);
         },
         error: function (data) {
 
@@ -59,29 +65,44 @@ $(document).ready(function()  {
 
 
     clearMessages: function(){
-      //app.$chat.html('')
-      //$('.chat').
+
+      $('.chats').remove();
     },
 
     addMessage: function(results){
       _.each(results, function(item){
-        $('.chat').append(item.username + ': ' + item.text);
+        var txt = $("<div class='chats'></div>").text(item.username + ': ' + item.text);
+        $('.chat').append(txt);
       });
     },
 
-    addRoom: function(){
+    addRoom: function(results){
+
+
+      _.each(results, function(item){
+        var room = item.roomname;
+        if(room === undefined || null || !room){
+          room = 'lobby';
+        }
+        if(!app.house[room]){
+          app.house[room] = true;
+          $('#roomSelection').append('<option value="' + room + '">'+ room +'</option>');
+        }
+      });
 
     },
+
 
     handleSubmit: function(event){
 
 
       var message = {
-        username: app.username,
+        username: this.username,
         text: $('.message').val(),
-        roomname: app.room || 'main'
+        roomname: this.room || 'main'
       };
-      app.send(message);
+      this.send(message);
+      console.log('sending message');
     },
 
     addFriend: function(){

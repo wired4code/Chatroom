@@ -14,22 +14,38 @@
 
   </head>
   <body>
-    <div id="main">
+    <!-- <div id="main">
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
-      <div id = 'rooms'>Room:
+  <!--     <div id = 'rooms'>Room:
         <select id= 'roomSelection'>
         </select>
       </div>
 
 
-        <form>
+        <form id='send'>
           <input type = 'text' class = 'message'/>
           <input type = 'submit' class='submit' value='submit'/>
         </form>
 
 
-      <div class = 'chat'></div>
+      <div class = 'chat'></div> -->
+
+<div id="main">
+    <h1>chatterbox</h1>
+    <div class="spinner"><img src="images/spiffygif_46x46.gif"></div>
+    <div id="rooms">
+      Room:
+      <select id="roomSelection">
+      </select>
+    </div>
+    <form action="#" id="send" method="post">
+      <input type="text" name="message" id="message"/>
+      <input type="submit" name="submit" class="submit"/>
+    </form>
+    <div class="chat"></div>
+  </div>
+
 
 
     </div>
