@@ -10,6 +10,7 @@ $(document).ready(function()  {
     username: 'anonymous',
     room: 'main',
     house: {},
+    friends: {};
 
     init: function(){
 
@@ -38,9 +39,11 @@ $(document).ready(function()  {
         }
       })
 
+      $('')
+
       app.fetch();
 
-      setInterval(app.fetch, 10000);
+      setInterval(app.fetch, 3000);
     },
 
     send: function(message){
@@ -66,6 +69,7 @@ $(document).ready(function()  {
     },
 
     fetch: function(message){
+
       $.ajax({
         //https://api.parse.com/1/classes/chatterbox?where={"username":{"$in":["anonymous"]}}'
         url: 'https://api.parse.com/1/classes/chatterbox',
@@ -95,7 +99,7 @@ $(document).ready(function()  {
     addMessage: function(results){
       app.clearMessages();
       _.each(results, function(item){
-        var txt = $("<div class='chats'></div>").text(item.username + ': ' + item.text);
+        var txt = $("<div class='chats'></div>").text(item.username + ': ' + _.escape(item.text));
         $('.chat').append(txt);
       });
     },
@@ -146,6 +150,7 @@ $(document).ready(function()  {
     },
 
     addFriend: function(){
+
 
     }
 
