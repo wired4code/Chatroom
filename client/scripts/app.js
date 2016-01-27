@@ -47,14 +47,13 @@ $(document).ready(function()  {
         app.friends[x] = true;
        /*   app.friends[x] === true;
         }*/
-        console.log(x);
-        console.log(app.friends);
+        app.fetch()
 
       })
 
       app.fetch();
 
-      setInterval(app.fetch, 10000);
+      setInterval(app.fetch, 1000);
     },
 
     send: function(message){
@@ -111,19 +110,37 @@ $(document).ready(function()  {
 
     addMessage: function(results){
       app.clearMessages();
+
+      var roomname = $('#roomSelection').val() || app.room;
+
       _.each(results, function(item){
         var txt = $("<div class='chats'></div>")
 
-        if(app.friends[item.username]){
-          var users = $('<span class="username"></span>').text(item.username);
-        } else{
-          users = $('<span class="users"></span>').text(item.username);
-        }
-        var message = $("<span class ='userMessages'></span>").text(_.escape(': ' +item.text));
-      $('.chat').append(txt);
-        users.appendTo(txt);
-        message.appendTo(txt);
-      });
+        if(item.roomname === roomname){
+
+          if(app.friends[item.username]){
+            var users = $('<span class="username"></span>').text(item.username);
+          } else{
+            users = $('<span class="users"></span>').text(item.username);
+          }
+          var message = $("<span class ='userMessages'></span>").text(_.escape(': ' +item.text));
+          $('.chat').append(txt);
+          users.appendTo(txt);
+          message.appendTo(txt);
+        };
+
+        });
+
+      //   if(app.friends[item.username]){
+      //     var users = $('<span class="username"></span>').text(item.username);
+      //   } else{
+      //     users = $('<span class="users"></span>').text(item.username);
+      //   }
+      //   var message = $("<span class ='userMessages'></span>").text(_.escape(': ' +item.text));
+      // $('.chat').append(txt);
+      //   users.appendTo(txt);
+      //   message.appendTo(txt);
+      // });
     },
     //'<div id="' + id + '">'
 
