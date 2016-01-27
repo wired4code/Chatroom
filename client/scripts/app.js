@@ -10,7 +10,7 @@ $(document).ready(function()  {
     username: 'anonymous',
     room: 'main',
     house: {},
-    friends: {};
+    friends: {},
 
     init: function(){
 
@@ -35,15 +35,26 @@ $(document).ready(function()  {
         console.log(roomSelection);
 
         if (roomSelection === 'New Room'){
-          app.addNewRoom();
+          app.addNewRoom('');
         }
       })
 
-      $('')
+
+
+      $('.chat').on('click', '.users', function(){
+        var x = $(this).text();
+        $(this).addClass("username");
+        app.friends[x] = true;
+       /*   app.friends[x] === true;
+        }*/
+        console.log(x);
+        console.log(app.friends);
+
+      })
 
       app.fetch();
 
-      setInterval(app.fetch, 3000);
+      setInterval(app.fetch, 10000);
     },
 
     send: function(message){
@@ -82,6 +93,8 @@ $(document).ready(function()  {
           app.addMessage(data.results);
 
           app.addRoom(data.results);
+
+          //app.addFriend(data.results);
         },
         error: function (data) {
 
@@ -99,10 +112,20 @@ $(document).ready(function()  {
     addMessage: function(results){
       app.clearMessages();
       _.each(results, function(item){
-        var txt = $("<div class='chats'></div>").text(item.username + ': ' + _.escape(item.text));
-        $('.chat').append(txt);
+        var txt = $("<div class='chats'></div>")
+
+        if(app.friends[item.username]){
+          var users = $('<span class="username"></span>').text(item.username);
+        } else{
+          users = $('<span class="users"></span>').text(item.username);
+        }
+        var message = $("<span class ='userMessages'></span>").text(_.escape(': ' +item.text));
+      $('.chat').append(txt);
+        users.appendTo(txt);
+        message.appendTo(txt);
       });
     },
+    //'<div id="' + id + '">'
 
     addRoom: function(results){
 
@@ -149,7 +172,24 @@ $(document).ready(function()  {
       console.log('sending message');
     },
 
-    addFriend: function(){
+    addFriend: function(results){
+
+/*      _.each(results, function(item){
+        var username = item.username
+        if(app.friends[username]){
+          $()
+        }
+      })
+
+      if(app.friends[username]){
+        friends[username] = true;
+      }*/
+
+      /*._each(results, function(item){
+        var userName= item.username;
+
+
+      })*/
 
 
     }
@@ -161,3 +201,4 @@ $(document).ready(function()  {
 app.init()
 
 });
+
