@@ -15,10 +15,8 @@ $(document).ready(function()  {
     init: function(){
 
       app.username = window.location.search.substr(10);
-      //$('#roomSelection').val() = 'main';
-      var self = this;
-      //$('.submit').on('submit', app.handleSubmit);
 
+      var self = this;
 
       $('#send').on('submit', function(event){
         event.preventDefault();
@@ -26,9 +24,8 @@ $(document).ready(function()  {
         self.handleSubmit();
       })
 
-
       $('#roomSelection').change(function(){
-        //event.preventDefault();
+
         console.log('clicking');
         var roomSelection = $('#roomSelection').val();
         var newRoom = $('#newRoom');
@@ -39,14 +36,11 @@ $(document).ready(function()  {
         }
       })
 
-
-
       $('.chat').on('click', '.users', function(){
         var x = $(this).text();
         $(this).addClass("username");
         app.friends[x] = true;
-       /*   app.friends[x] === true;
-        }*/
+
         app.fetch()
 
       })
@@ -81,19 +75,17 @@ $(document).ready(function()  {
     fetch: function(message){
 
       $.ajax({
-        //https://api.parse.com/1/classes/chatterbox?where={"username":{"$in":["anonymous"]}}'
+
         url: 'https://api.parse.com/1/classes/chatterbox',
         type: 'GET',
-        //data: JSON.stringify(message),
+
         data:{order: '-createdAt'},
         contentType: 'application/json',
         success: function (data) {
-         // console.log('chatterbox: Message received. Data: ', data);
+
           app.addMessage(data.results);
 
           app.addRoom(data.results);
-
-          //app.addFriend(data.results);
         },
         error: function (data) {
 
@@ -101,7 +93,6 @@ $(document).ready(function()  {
         }
       });
     },
-
 
     clearMessages: function(){
 
@@ -131,18 +122,7 @@ $(document).ready(function()  {
 
         });
 
-      //   if(app.friends[item.username]){
-      //     var users = $('<span class="username"></span>').text(item.username);
-      //   } else{
-      //     users = $('<span class="users"></span>').text(item.username);
-      //   }
-      //   var message = $("<span class ='userMessages'></span>").text(_.escape(': ' +item.text));
-      // $('.chat').append(txt);
-      //   users.appendTo(txt);
-      //   message.appendTo(txt);
-      // });
     },
-    //'<div id="' + id + '">'
 
     addRoom: function(results){
 
@@ -163,9 +143,7 @@ $(document).ready(function()  {
     },
 
     addNewRoom: function(){
-      //var roomSelection = $('#roomSelection').val();
 
-      //if(roomSelection === 'New Room'){
         console.log('should get a prompt here');
         var createNewRoom = prompt('Name your room');
         if(createNewRoom){
@@ -176,9 +154,7 @@ $(document).ready(function()  {
         $('#roomSelection').val(createNewRoom);
     },
 
-
     handleSubmit: function(event){
-
 
       var message = {
         username: app.username,
@@ -191,27 +167,7 @@ $(document).ready(function()  {
 
     addFriend: function(results){
 
-/*      _.each(results, function(item){
-        var username = item.username
-        if(app.friends[username]){
-          $()
-        }
-      })
-
-      if(app.friends[username]){
-        friends[username] = true;
-      }*/
-
-      /*._each(results, function(item){
-        var userName= item.username;
-
-
-      })*/
-
-
     }
-
-
 
   };
 
